@@ -8,6 +8,12 @@ import time
 # Set up the webdriver
 driver = webdriver.Chrome()  # Replace with your preferred browser
 
+def pause(pv):
+    time.sleep(pv)
+
+def close(driver):
+    driver.close()
+
 def find_website(driver):
 # Navigate to Google
     driver.get("https://www.google.com")
@@ -28,7 +34,7 @@ def click_button(driver):
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "rso")))
 
     # Wait for the link to be present on the page
-    link_xpath = "//h3[contains(text(),'Circuito Líder - Fuerza Radial en Venezuela - stre')]"
+    link_xpath = "//h3[text()='Circuito Líder']"
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, link_xpath)))
 
     # Click on the first link
@@ -37,21 +43,15 @@ def click_button(driver):
 
 
 def play_button(driver):
-    # Wait for the play button to be present on the page
-    play_button_css = ".btn.btn-play"
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, play_button_css)))
+    # Find the play button element by its ID
+    play_button = driver.find_element(By.ID, 'boton-play-pause')
 
-    # Click on the play button
-    play_button_element = driver.find_element(By.CSS_SELECTOR, play_button_css)
-    play_button_element.click()
-
-    time.sleep(10)
-
-    # Keep the browser open
-    # (no driver.quit)
-
+    # Click the play button
+    play_button.click()
 
 find_website(driver)
 click_button(driver)
+pause(10)
 play_button(driver)
-time.sleep(10)
+pause(10)
+close(driver)
