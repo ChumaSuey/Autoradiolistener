@@ -4,25 +4,17 @@ import time as t
 
 with sync_playwright() as playwright:
     browser = playwright.chromium.launch(headless=False)
+    context = browser.new_context()
+    context.set_geolocation(None)
     page = browser.new_page()
     page.goto("https://www.google.com")
-    page.wait_for_load_state()
-
-    t.sleep(250)
-async def click_button(page):
-    await page.click('text="Acceptä tot"');
-
-    # Type in the search bar
-    page.fill("input[name='q']", "circuito lider")
-
-    # Submit the search form
-    page.press("input[name='q']", "Enter")
-
-    # Wait for the search results to load
-    page.wait_for_load_state()
-
-    # Click on the first link
-    page.click("a[href='https://circuitolider.com']")
-
-    # Keep the browser open
-    # (no browser.close)
+    page.type('[role="combobox"]', "Circuito Lider")
+    page.wait_for_timeout(1000)  # pause for 1 second
+    page.keyboard.press("Enter")  # press Enter
+    page.wait_for_timeout(5000)
+    first_result = page.query_selector('div.tF2Cxc div.yuRUbf div h3.LC20lb.MBeuO.DKV0Md:has-text("Circuito Líder")')
+     if first_result:
+     page.click(first_result)  # click on the first search result
+     else:
+         print("Could not find the first search result")
+    page.wait_for_timeout(5000)  # keep the browser open for 5 seconds
