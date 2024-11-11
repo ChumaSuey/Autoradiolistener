@@ -49,6 +49,7 @@ def play_button(driver):
     # Click the play button
     play_button.click()
 
+# Function Action index
 find_website(driver)
 click_button(driver)
 pause(10)
